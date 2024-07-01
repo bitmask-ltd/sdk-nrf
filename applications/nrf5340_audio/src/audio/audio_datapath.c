@@ -1056,148 +1056,148 @@ int audio_datapath_init(void)
 	return 0;
 }
 
-static int cmd_i2s_tone_play(const struct shell *shell, size_t argc, const char **argv)
-{
-	int ret;
-	uint16_t freq;
-	uint16_t dur_ms;
-	float amplitude;
+// static int cmd_i2s_tone_play(const struct shell *shell, size_t argc, const char **argv)
+// {
+// 	int ret;
+// 	uint16_t freq;
+// 	uint16_t dur_ms;
+// 	float amplitude;
 
-	if (argc != 4) {
-		shell_error(
-			shell,
-			"3 arguments (freq [Hz], dur [ms], and amplitude [0-1.0] must be provided");
-		return -EINVAL;
-	}
+// 	if (argc != 4) {
+// 		shell_error(
+// 			shell,
+// 			"3 arguments (freq [Hz], dur [ms], and amplitude [0-1.0] must be provided");
+// 		return -EINVAL;
+// 	}
 
-	if (!isdigit((int)argv[1][0])) {
-		shell_error(shell, "Argument 1 is not numeric");
-		return -EINVAL;
-	}
+// 	if (!isdigit((int)argv[1][0])) {
+// 		shell_error(shell, "Argument 1 is not numeric");
+// 		return -EINVAL;
+// 	}
 
-	if (!isdigit((int)argv[2][0])) {
-		shell_error(shell, "Argument 2 is not numeric");
-		return -EINVAL;
-	}
+// 	if (!isdigit((int)argv[2][0])) {
+// 		shell_error(shell, "Argument 2 is not numeric");
+// 		return -EINVAL;
+// 	}
 
-	freq = strtoul(argv[1], NULL, 10);
-	dur_ms = strtoul(argv[2], NULL, 10);
-	amplitude = strtof(argv[3], NULL);
+// 	freq = strtoul(argv[1], NULL, 10);
+// 	dur_ms = strtoul(argv[2], NULL, 10);
+// 	amplitude = strtof(argv[3], NULL);
 
-	if (amplitude <= 0 || amplitude > 1) {
-		shell_error(shell, "Make sure amplitude is 0 < [float] >= 1");
-		return -EINVAL;
-	}
+// 	if (amplitude <= 0 || amplitude > 1) {
+// 		shell_error(shell, "Make sure amplitude is 0 < [float] >= 1");
+// 		return -EINVAL;
+// 	}
 
-	shell_print(shell, "Setting tone %d Hz for %d ms", freq, dur_ms);
-	ret = audio_datapath_tone_play(freq, dur_ms, amplitude);
+// 	shell_print(shell, "Setting tone %d Hz for %d ms", freq, dur_ms);
+// 	ret = audio_datapath_tone_play(freq, dur_ms, amplitude);
 
-	if (ret == -EBUSY) {
-		/* Abort continuous running tone with new tone */
-		audio_datapath_tone_stop();
-		ret = audio_datapath_tone_play(freq, dur_ms, amplitude);
-	}
+// 	if (ret == -EBUSY) {
+// 		/* Abort continuous running tone with new tone */
+// 		audio_datapath_tone_stop();
+// 		ret = audio_datapath_tone_play(freq, dur_ms, amplitude);
+// 	}
 
-	if (ret) {
-		shell_print(shell, "Tone failed with code %d", ret);
-	}
+// 	if (ret) {
+// 		shell_print(shell, "Tone failed with code %d", ret);
+// 	}
 
-	shell_print(shell, "Tone play: %d Hz for %d ms with amplitude %.02f", freq, dur_ms,
-		    (double)amplitude);
+// 	shell_print(shell, "Tone play: %d Hz for %d ms with amplitude %.02f", freq, dur_ms,
+// 		    (double)amplitude);
 
-	return ret;
-}
+// 	return ret;
+// }
 
-static int cmd_i2s_tone_stop(const struct shell *shell, size_t argc, const char **argv)
-{
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
+// static int cmd_i2s_tone_stop(const struct shell *shell, size_t argc, const char **argv)
+// {
+// 	ARG_UNUSED(argc);
+// 	ARG_UNUSED(argv);
 
-	audio_datapath_tone_stop();
+// 	audio_datapath_tone_stop();
 
-	shell_print(shell, "Tone stop");
+// 	shell_print(shell, "Tone stop");
 
-	return 0;
-}
+// 	return 0;
+// }
 
-static int cmd_hfclkaudio_drift_comp_enable(const struct shell *shell, size_t argc,
-					    const char **argv)
-{
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
+// static int cmd_hfclkaudio_drift_comp_enable(const struct shell *shell, size_t argc,
+// 					    const char **argv)
+// {
+// 	ARG_UNUSED(argc);
+// 	ARG_UNUSED(argv);
 
-	ctrl_blk.drift_comp.enabled = true;
+// 	ctrl_blk.drift_comp.enabled = true;
 
-	shell_print(shell, "Audio PLL drift compensation enabled");
+// 	shell_print(shell, "Audio PLL drift compensation enabled");
 
-	return 0;
-}
+// 	return 0;
+// }
 
-static int cmd_hfclkaudio_drift_comp_disable(const struct shell *shell, size_t argc,
-					     const char **argv)
-{
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
+// static int cmd_hfclkaudio_drift_comp_disable(const struct shell *shell, size_t argc,
+// 					     const char **argv)
+// {
+// 	ARG_UNUSED(argc);
+// 	ARG_UNUSED(argv);
 
-	if (ctrl_blk.pres_comp.enabled) {
-		shell_print(shell, "Pres comp must be disabled to disable drift comp");
-	} else {
-		ctrl_blk.drift_comp.enabled = false;
-		ctrl_blk.drift_comp.ctr = 0;
-		drift_comp_state_set(DRIFT_STATE_INIT);
+// 	if (ctrl_blk.pres_comp.enabled) {
+// 		shell_print(shell, "Pres comp must be disabled to disable drift comp");
+// 	} else {
+// 		ctrl_blk.drift_comp.enabled = false;
+// 		ctrl_blk.drift_comp.ctr = 0;
+// 		drift_comp_state_set(DRIFT_STATE_INIT);
 
-		shell_print(shell, "Audio PLL drift compensation disabled");
-	}
+// 		shell_print(shell, "Audio PLL drift compensation disabled");
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }
 
-static int cmd_audio_pres_comp_enable(const struct shell *shell, size_t argc, const char **argv)
-{
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
+// static int cmd_audio_pres_comp_enable(const struct shell *shell, size_t argc, const char **argv)
+// {
+// 	ARG_UNUSED(argc);
+// 	ARG_UNUSED(argv);
 
-	if (ctrl_blk.drift_comp.enabled) {
-		ctrl_blk.pres_comp.enabled = true;
+// 	if (ctrl_blk.drift_comp.enabled) {
+// 		ctrl_blk.pres_comp.enabled = true;
 
-		shell_print(shell, "Presentation compensation enabled");
-	} else {
-		shell_print(shell, "Drift comp must be enabled to enable pres comp");
-	}
+// 		shell_print(shell, "Presentation compensation enabled");
+// 	} else {
+// 		shell_print(shell, "Drift comp must be enabled to enable pres comp");
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }
 
-static int cmd_audio_pres_comp_disable(const struct shell *shell, size_t argc, const char **argv)
-{
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
+// static int cmd_audio_pres_comp_disable(const struct shell *shell, size_t argc, const char **argv)
+// {
+// 	ARG_UNUSED(argc);
+// 	ARG_UNUSED(argv);
 
-	ctrl_blk.pres_comp.enabled = false;
-	pres_comp_state_set(PRES_STATE_INIT);
+// 	ctrl_blk.pres_comp.enabled = false;
+// 	pres_comp_state_set(PRES_STATE_INIT);
 
-	shell_print(shell, "Presentation compensation disabled");
+// 	shell_print(shell, "Presentation compensation disabled");
 
-	return 0;
-}
+// 	return 0;
+// }
 
-SHELL_STATIC_SUBCMD_SET_CREATE(test_cmd,
-			       SHELL_COND_CMD(CONFIG_SHELL, nrf_tone_start, NULL,
-					      "Start local tone from nRF5340", cmd_i2s_tone_play),
-			       SHELL_COND_CMD(CONFIG_SHELL, nrf_tone_stop, NULL,
-					      "Stop local tone from nRF5340", cmd_i2s_tone_stop),
-			       SHELL_COND_CMD(CONFIG_SHELL, pll_drift_comp_enable, NULL,
-					      "Enable audio PLL auto drift compensation (default)",
-					      cmd_hfclkaudio_drift_comp_enable),
-			       SHELL_COND_CMD(CONFIG_SHELL, pll_drift_comp_disable, NULL,
-					      "Disable audio PLL auto drift compensation",
-					      cmd_hfclkaudio_drift_comp_disable),
-			       SHELL_COND_CMD(CONFIG_SHELL, pll_pres_comp_enable, NULL,
-					      "Enable audio presentation compensation (default)",
-					      cmd_audio_pres_comp_enable),
-			       SHELL_COND_CMD(CONFIG_SHELL, pll_pres_comp_disable, NULL,
-					      "Disable audio presentation compensation",
-					      cmd_audio_pres_comp_disable),
-			       SHELL_SUBCMD_SET_END);
+// SHELL_STATIC_SUBCMD_SET_CREATE(test_cmd,
+// 			       SHELL_COND_CMD(CONFIG_SHELL, nrf_tone_start, NULL,
+// 					      "Start local tone from nRF5340", cmd_i2s_tone_play),
+// 			       SHELL_COND_CMD(CONFIG_SHELL, nrf_tone_stop, NULL,
+// 					      "Stop local tone from nRF5340", cmd_i2s_tone_stop),
+// 			       SHELL_COND_CMD(CONFIG_SHELL, pll_drift_comp_enable, NULL,
+// 					      "Enable audio PLL auto drift compensation (default)",
+// 					      cmd_hfclkaudio_drift_comp_enable),
+// 			       SHELL_COND_CMD(CONFIG_SHELL, pll_drift_comp_disable, NULL,
+// 					      "Disable audio PLL auto drift compensation",
+// 					      cmd_hfclkaudio_drift_comp_disable),
+// 			       SHELL_COND_CMD(CONFIG_SHELL, pll_pres_comp_enable, NULL,
+// 					      "Enable audio presentation compensation (default)",
+// 					      cmd_audio_pres_comp_enable),
+// 			       SHELL_COND_CMD(CONFIG_SHELL, pll_pres_comp_disable, NULL,
+// 					      "Disable audio presentation compensation",
+// 					      cmd_audio_pres_comp_disable),
+// 			       SHELL_SUBCMD_SET_END);
 
-SHELL_CMD_REGISTER(test, &test_cmd, "Test mode commands", NULL);
+// SHELL_CMD_REGISTER(test, &test_cmd, "Test mode commands", NULL);
