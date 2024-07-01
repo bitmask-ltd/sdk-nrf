@@ -5,7 +5,7 @@
 #
 
 # GATEWAY
-if AUDIO_DEV = 2
+# if AUDIO_DEV = 2
 
 if AUDIO_SOURCE_USB
 
@@ -42,4 +42,4 @@ config USB_DEVICE_LOG_LEVEL
 
 endif # AUDIO_SOURCE_USB
 
-endif # AUDIO_DEV = 2 (GATEWAY)
+# endif # AUDIO_DEV = 2 (GATEWAY)

@@ -209,18 +209,18 @@ static void bt_enabled_cb(int err)
 
 static int bonding_clear_check(void)
 {
-	int ret;
-	bool pressed;
+	// int ret;
+	// bool pressed;
 
-	ret = button_pressed(BUTTON_5, &pressed);
-	if (ret) {
-		return ret;
-	}
+	// ret = button_pressed(BUTTON_5, &pressed);
+	// if (ret) {
+	// 	return ret;
+	// }
 
-	if (pressed) {
-		ret = bt_mgmt_bonding_clear();
-		return ret;
-	}
+	// if (pressed) {
+	// 	ret = bt_mgmt_bonding_clear();
+	// 	return ret;
+	// }
 
 	return 0;
 }

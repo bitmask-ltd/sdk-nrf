@@ -87,10 +87,10 @@ void le_audio_rx_data_handler(uint8_t const *const p_data, size_t data_size, boo
 		return;
 	}
 
-	if (channel_index != AUDIO_CH_L && (CONFIG_AUDIO_DEV == GATEWAY)) {
-		/* Only left channel RX data in use on gateway */
-		return;
-	}
+	// if (channel_index != AUDIO_CH_L && (CONFIG_AUDIO_DEV == GATEWAY)) {
+	// 	/* Only left channel RX data in use on gateway */
+	// 	return;
+	// }
 
 	ret = data_fifo_num_used_get(&ble_fifo_rx, &blocks_alloced_num, &blocks_locked_num);
 	ERR_CHK(ret);
@@ -147,7 +147,7 @@ static void audio_datapath_thread(void *dummy1, void *dummy2, void *dummy3)
 							&iso_received_size, K_FOREVER);
 		ERR_CHK(ret);
 
-		if (IS_ENABLED(CONFIG_AUDIO_SOURCE_USB) && (CONFIG_AUDIO_DEV == GATEWAY)) {
+		if (IS_ENABLED(CONFIG_AUDIO_SOURCE_USB)) {
 			ret = audio_system_decode(iso_received->data, iso_received->data_size,
 						  iso_received->bad_frame);
 			ERR_CHK(ret);

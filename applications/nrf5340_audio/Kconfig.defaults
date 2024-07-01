@@ -142,3 +142,6 @@ config WATCHDOG
 
 config TASK_WDT
 	default y
+
+config BT_AUDIO_BROADCAST_NAME
+	default "Bitmask BMD100"

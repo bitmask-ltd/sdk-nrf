@@ -400,7 +400,7 @@ void audio_system_start(void)
 		ERR_CHK(ret);
 	}
 
-#if ((CONFIG_AUDIO_SOURCE_USB) && (CONFIG_AUDIO_DEV == GATEWAY))
+#if (CONFIG_AUDIO_SOURCE_USB)
 	ret = audio_usb_start(&fifo_tx, &fifo_rx);
 	ERR_CHK(ret);
 #else
@@ -423,7 +423,7 @@ void audio_system_stop(void)
 
 	LOG_DBG("Stopping codec");
 
-#if ((CONFIG_AUDIO_DEV == GATEWAY) && CONFIG_AUDIO_SOURCE_USB)
+#if (CONFIG_AUDIO_SOURCE_USB)
 	audio_usb_stop();
 #else
 	ret = hw_codec_soft_reset();
@@ -468,7 +468,7 @@ int audio_system_init(void)
 {
 	int ret;
 
-#if ((CONFIG_AUDIO_DEV == GATEWAY) && (CONFIG_AUDIO_SOURCE_USB))
+#if (CONFIG_AUDIO_SOURCE_USB)
 	ret = audio_usb_init();
 	if (ret) {
 		LOG_ERR("Failed to initialize USB: %d", ret);
@@ -492,35 +492,35 @@ int audio_system_init(void)
 	return 0;
 }
 
-static int cmd_audio_system_start(const struct shell *shell, size_t argc, const char **argv)
-{
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
+// static int cmd_audio_system_start(const struct shell *shell, size_t argc, const char **argv)
+// {
+// 	ARG_UNUSED(argc);
+// 	ARG_UNUSED(argv);
 
-	audio_system_start();
+// 	audio_system_start();
 
-	shell_print(shell, "Audio system started");
+// 	shell_print(shell, "Audio system started");
 
-	return 0;
-}
+// 	return 0;
+// }
 
-static int cmd_audio_system_stop(const struct shell *shell, size_t argc, const char **argv)
-{
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
+// static int cmd_audio_system_stop(const struct shell *shell, size_t argc, const char **argv)
+// {
+// 	ARG_UNUSED(argc);
+// 	ARG_UNUSED(argv);
 
-	audio_system_stop();
+// 	audio_system_stop();
 
-	shell_print(shell, "Audio system stopped");
+// 	shell_print(shell, "Audio system stopped");
 
-	return 0;
-}
+// 	return 0;
+// }
 
-SHELL_STATIC_SUBCMD_SET_CREATE(audio_system_cmd,
-			       SHELL_COND_CMD(CONFIG_SHELL, start, NULL, "Start the audio system",
-					      cmd_audio_system_start),
-			       SHELL_COND_CMD(CONFIG_SHELL, stop, NULL, "Stop the audio system",
-					      cmd_audio_system_stop),
-			       SHELL_SUBCMD_SET_END);
+// SHELL_STATIC_SUBCMD_SET_CREATE(audio_system_cmd,
+// 			       SHELL_COND_CMD(CONFIG_SHELL, start, NULL, "Start the audio system",
+// 					      cmd_audio_system_start),
+// 			       SHELL_COND_CMD(CONFIG_SHELL, stop, NULL, "Stop the audio system",
+// 					      cmd_audio_system_stop),
+// 			       SHELL_SUBCMD_SET_END);
 
-SHELL_CMD_REGISTER(audio_system, &audio_system_cmd, "Audio system commands", NULL);
+// SHELL_CMD_REGISTER(audio_system, &audio_system_cmd, "Audio system commands", NULL);
