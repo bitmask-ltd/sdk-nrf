@@ -76,8 +76,7 @@ static void data_write(const struct device *dev)
 		tx_first_data = true;
 	}
 }
-#endif /* (CONFIG_STREAM_BIDIRECTIONAL) */
-
+#else /* (CONFIG_STREAM_BIDIRECTIONAL) */
 static void data_received(const struct device *dev, struct net_buf *buffer, size_t size)
 {
 	int ret;
@@ -135,6 +134,7 @@ static void data_received(const struct device *dev, struct net_buf *buffer, size
 		rx_first_data = true;
 	}
 }
+#endif
 
 static void feature_update(const struct device *dev, const struct usb_audio_fu_evt *evt)
 {
@@ -148,11 +148,12 @@ static void feature_update(const struct device *dev, const struct usb_audio_fu_e
 }
 
 static const struct usb_audio_ops ops = {
-	.data_received_cb = data_received,
 	.feature_update_cb = feature_update,
 #if (CONFIG_STREAM_BIDIRECTIONAL)
-	.data_request_cb = data_write,
-#endif /* (CONFIG_STREAM_BIDIRECTIONAL) */
+	.data_request_cb = data_write
+#else /* (CONFIG_STREAM_BIDIRECTIONAL) */
+	.data_received_cb = data_received
+#endif
 };
 
 int audio_usb_start(struct data_fifo *fifo_tx_in, struct data_fifo *fifo_rx_in)
